@@ -1,19 +1,14 @@
 from nextcord.ext import commands
-from dotenv import load_dotenv
-
-from constants import BOT_TOKEN
+from config import BOT_TOKEN
 from db import engine
 from models import Base
 from tasks import (
     update_discord_user_roles_task,
     update_nominator_addresses_task,
-    update_validator_addresses_task
+    update_validator_addresses_task,
 )
 
-# load bot environ
-load_dotenv()
-
-# create model schemas
+# create db schemas
 Base.metadata.create_all(engine)
 
 # start bot
@@ -24,9 +19,13 @@ update_discord_user_roles_task.start()
 update_validator_addresses_task.start()
 update_nominator_addresses_task.start()
 
+# start command cog
+bot.load_extension("commands")
+
+
 @bot.event
 async def on_ready():
-    print(f'We have logged in as {bot.user}')
+    print(f"We have logged in as {bot.user}")
 
 
 bot.run(BOT_TOKEN)

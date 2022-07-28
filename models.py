@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import declarative_base, relationship
 
+
 Base = declarative_base()
 
 
@@ -9,8 +10,8 @@ class DiscordUser(Base):
 
     id = Column(Integer, primary_key=True)
     username = Column(String(64))
-    validator = relationship("Validator", back_populates="validator")
-    nominator = relationship("Nominator", back_populates="nominator")
+    validator = relationship("Validator", back_populates="discord_user")
+    nominator = relationship("Nominator", back_populates="discord_user")
 
     def __repr__(self):
         return f"DiscordUser(id={self.id!r}, username={self.name!r})"
@@ -21,8 +22,12 @@ class Validator(Base):
 
     id = Column(Integer, primary_key=True)
     address = Column(String(64))
-    discord_user_id = Column(Integer, ForeignKey("discord_user.id", ondelete='SET NULL'), nullable=True)
-    discord_user = relationship("DiscordUser", back_populates="validator", uselist=False)
+    discord_user_id = Column(
+        Integer, ForeignKey("discord_user.id", ondelete="SET NULL"), nullable=True
+    )
+    discord_user = relationship(
+        "DiscordUser", back_populates="validator", uselist=False
+    )
 
     def __repr__(self):
         return f"Validator(id={self.id!r}, address={self.address!r})"
@@ -33,8 +38,12 @@ class Nominator(Base):
 
     id = Column(Integer, primary_key=True)
     address = Column(String(64))
-    discord_user_id = Column(Integer, ForeignKey("discord_user.id", ondelete='SET NULL'), nullable=True)
-    discord_user = relationship("DiscordUser", back_populates="nominator", uselist=False)
+    discord_user_id = Column(
+        Integer, ForeignKey("discord_user.id", ondelete="SET NULL"), nullable=True
+    )
+    discord_user = relationship(
+        "DiscordUser", back_populates="nominator", uselist=False
+    )
 
     def __repr__(self):
         return f"Nominator(id={self.id!r}, address={self.address!r})"
