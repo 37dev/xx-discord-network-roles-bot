@@ -9,7 +9,6 @@ def update_discord_user_network_roles():
     xx_service = XXNetworkInterface(url=XX_SUBSTRATE_URL)
 
     with Session() as session:
-        # TODO: blocking call - should refactor to async
         identities = xx_service.list_identities()
 
         # clear db from old records
@@ -46,7 +45,6 @@ def update_validator_addresses():
     xx_service = XXNetworkInterface(url=XX_SUBSTRATE_URL)
 
     with Session() as session:
-        # TODO: blocking call - should refactor to async
         validator_addresses = xx_service.list_validator_addresses()
 
         # clear db from old records
@@ -65,7 +63,6 @@ def update_nominator_addresses():
     xx_service = XXNetworkInterface(url=XX_SUBSTRATE_URL)
 
     with Session() as session:
-        # TODO: blocking call - should refactor to async
         nominator_addresses = xx_service.list_nominator_addresses()
 
         # clear db from old records
