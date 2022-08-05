@@ -67,11 +67,7 @@ class AddNominatorRoleButton(BaseRoleButton):
 
 class ResetRolesButton(BaseRoleButton):
     label = "RESET"
-    BUTTON_CONFIG = {
-        "row": 2,
-        "label": label,
-        "style": nextcord.ButtonStyle.danger
-    }
+    BUTTON_CONFIG = {"row": 2, "label": label, "style": nextcord.ButtonStyle.danger}
 
     async def callback(self, interaction):
         member = interaction.guild.get_member(interaction.user.id)
@@ -85,7 +81,9 @@ class ResetRolesButton(BaseRoleButton):
             nominator_role = get(interaction.guild.roles, name=DISCORD_NOMINATOR_ROLE)
             await member.remove_roles(nominator_role)
 
-        self.view.update_disabled_role_buttons(disable_nominator=False, disable_validator=False)
+        self.view.update_disabled_role_buttons(
+            disable_nominator=False, disable_validator=False
+        )
 
         embed = RolesResetSuccessfullyEmbed()
         await interaction.response.edit_message(view=self.view, embed=embed)
@@ -110,10 +108,14 @@ class NetworkRolesView(nextcord.ui.View):
         disable_validator_button = is_discord_user_validator(member_username)
         disable_nominator_button = is_discord_user_nominator(member_username)
 
-        self.update_disabled_role_buttons(disable_validator_button, disable_nominator_button)
+        self.update_disabled_role_buttons(
+            disable_validator_button, disable_nominator_button
+        )
 
-    def update_disabled_role_buttons(self, disable_validator=None, disable_nominator=None):
-        disable_reset_button = (disable_validator is False and disable_nominator is False)
+    def update_disabled_role_buttons(
+        self, disable_validator=None, disable_nominator=None
+    ):
+        disable_reset_button = disable_validator is False and disable_nominator is False
 
         if not self.children:
             raise ValueError("Children not set")

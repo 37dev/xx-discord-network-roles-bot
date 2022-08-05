@@ -82,7 +82,11 @@ def update_nominator_addresses():
 
 def is_discord_user_validator(discord_username):
     with Session() as session:
-        if discord_user := session.query(DiscordUser).filter_by(username=discord_username).first():
+        if (
+            discord_user := session.query(DiscordUser)
+            .filter_by(username=discord_username)
+            .first()
+        ):
             if validator := bool(discord_user.validator):
                 return validator
 
@@ -91,7 +95,11 @@ def is_discord_user_validator(discord_username):
 
 def is_discord_user_nominator(discord_username):
     with Session() as session:
-        if discord_user := session.query(DiscordUser).filter_by(username=discord_username).first():
+        if (
+            discord_user := session.query(DiscordUser)
+            .filter_by(username=discord_username)
+            .first()
+        ):
             if nominator := bool(discord_user.nominator):
                 return nominator
 
