@@ -1,4 +1,4 @@
-from substrateinterface import SubstrateInterface # noqa
+from substrateinterface import SubstrateInterface  # noqa
 
 
 class XXNetworkInterface(SubstrateInterface):

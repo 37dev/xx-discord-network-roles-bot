@@ -1,5 +1,6 @@
+import nextcord
 from nextcord.ext import commands
-from config import BOT_TOKEN
+from config import BOT_TOKEN, DISCORD_XX_ROLES
 from db import engine
 from models import Base
 from tasks import (
@@ -11,8 +12,12 @@ from tasks import (
 # create db schemas
 Base.metadata.create_all(engine)
 
+# add member intent
+intents = nextcord.Intents.default()
+intents.members = True
+
 # start bot
-bot = commands.Bot()
+bot = commands.Bot(intents=intents)
 
 # start async tasks
 update_discord_user_roles_task.start()
@@ -25,6 +30,14 @@ bot.load_extension("commands")
 
 @bot.event
 async def on_ready():
+    # add roles to server if they don't exist
+    for guild in bot.guilds:
+        guild_roles_names = [role.name for role in guild.roles]
+        for role in DISCORD_XX_ROLES:
+            if role not in guild_roles_names:
+                print(f"Adding role {role} to guild {guild.name}")
+                await guild.create_role(name=role)
+
     print(f"We have logged in as {bot.user}")
 
 
