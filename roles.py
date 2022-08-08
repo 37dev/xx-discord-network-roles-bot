@@ -20,23 +20,21 @@ def update_discord_user_network_roles():
             if discord_username is not None:
                 discord_user = DiscordUser(username=discord_username)
                 session.add(discord_user)
-                session.flush()
-
                 if (
-                    validator := session.query(Validator)
+                    session.query(Validator)
                     .filter_by(address=account)
                     .first()
                 ):
-                    validator.discord_user_id = discord_user.id
-                    session.add(validator)
+                    discord_user.is_validator = True
+                    session.add(discord_user)
 
                 if (
-                    nominator := session.query(Nominator)
+                    session.query(Nominator)
                     .filter_by(address=account)
                     .first()
                 ):
-                    nominator.discord_user_id = discord_user.id
-                    session.add(nominator)
+                    discord_user.is_nominator = True
+                    session.add(discord_user)
 
         session.commit()
 
@@ -84,8 +82,7 @@ def is_discord_user_validator(discord_username):
             .filter_by(username=discord_username)
             .first()
         ):
-            if validator := bool(discord_user.validator):
-                return validator
+            return discord_user.is_validator
 
         return False
 
@@ -97,7 +94,6 @@ def is_discord_user_nominator(discord_username):
             .filter_by(username=discord_username)
             .first()
         ):
-            if nominator := bool(discord_user.nominator):
-                return nominator
+            return discord_user.is_nominator
 
         return False

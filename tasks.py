@@ -11,17 +11,26 @@ from roles import (
 
 @tasks.loop(seconds=30)
 async def update_discord_user_roles_task():
-    loop = asyncio.get_running_loop()
-    await loop.run_in_executor(None, update_discord_user_network_roles)
+    try:
+        loop = asyncio.get_running_loop()
+        await loop.run_in_executor(None, update_discord_user_network_roles)
+    except Exception as e:
+        print(e)
 
 
 @tasks.loop(seconds=30)
 async def update_validator_addresses_task():
-    loop = asyncio.get_running_loop()
-    await loop.run_in_executor(None, update_validator_addresses)
+    try:
+        loop = asyncio.get_running_loop()
+        await loop.run_in_executor(None, update_validator_addresses)
+    except Exception as e:
+        print(e)
 
 
 @tasks.loop(seconds=30)
 async def update_nominator_addresses_task():
-    loop = asyncio.get_running_loop()
-    await loop.run_in_executor(None, update_nominator_addresses)
+    try:
+        loop = asyncio.get_running_loop()
+        await loop.run_in_executor(None, update_nominator_addresses)
+    except Exception as e:
+        print(e)
