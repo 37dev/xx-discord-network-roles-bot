@@ -103,10 +103,12 @@ class NetworkRolesView(nextcord.ui.View):
 
     def _set_disabled_role_buttons(self, interaction):
         member = interaction.guild.get_member(interaction.user.id)
-        member_username = str(member)
 
-        disable_validator_button = is_discord_user_validator(member_username)
-        disable_nominator_button = is_discord_user_nominator(member_username)
+        validator_role = get(interaction.guild.roles, name=DISCORD_VALIDATOR_ROLE)
+        nominator_role = get(interaction.guild.roles, name=DISCORD_NOMINATOR_ROLE)
+
+        disable_validator_button = True if member.get_role(validator_role.id) else False
+        disable_nominator_button = True if member.get_role(nominator_role.id) else False
 
         self.update_disabled_role_buttons(
             disable_validator_button, disable_nominator_button
